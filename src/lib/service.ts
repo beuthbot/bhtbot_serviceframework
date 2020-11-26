@@ -37,7 +37,7 @@ export default class Service {
 
     this.endpoints[path] = handler;
     this.app.post(path, async (req, res) => {
-      const gatewayRequest = this.sanitize(req.body);
+      const gatewayRequest = this.sanitize(req.body.message);
 
       try {
         const expectedHistory = gatewayRequest.answer.history;
