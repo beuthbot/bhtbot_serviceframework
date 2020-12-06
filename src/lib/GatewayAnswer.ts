@@ -2,6 +2,8 @@ export class GatewayAnswer {
   history: string[];
   content?: string;
   error?: string;
+  cacheable: boolean = true;
+
   public setContent(content: string){
     this.content = content;
     return this;
@@ -19,6 +21,10 @@ export class GatewayAnswer {
       this.history = [];
     }
     this.history.push(name);
+    return this;
+  }
+  public setCacheable(cacheable: boolean){
+    this.cacheable = cacheable;
     return this;
   }
 }
