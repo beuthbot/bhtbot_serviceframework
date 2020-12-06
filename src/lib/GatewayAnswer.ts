@@ -1,5 +1,5 @@
 export class GatewayAnswer {
   history: string[];
-  message?: string;
+  content?: string;
   error?: string;
 }
