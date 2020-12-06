@@ -1,4 +1,4 @@
-export class GatewayAnswer {
+export default class GatewayAnswer {
   history: string[];
   content?: string;
   error?: string;

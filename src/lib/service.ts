@@ -1,7 +1,7 @@
 import express, { Express } from 'express';
 
 import AppConfig from './AppConfig';
-import { GatewayAnswer } from './GatewayAnswer';
+import GatewayAnswer from './GatewayAnswer';
 import GatewayRequest from './GatewayRequest';
 
 export default class Service {

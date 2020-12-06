@@ -1,6 +1,6 @@
 import { BotIntent, BotUser } from '@bhtbot/bhtbot';
 
-import { GatewayAnswer } from './GatewayAnswer';
+import GatewayAnswer from './GatewayAnswer';
 import GatewayRequestEntity from './GatewayRequestEntity';
 
 export default class GatewayRequest {
