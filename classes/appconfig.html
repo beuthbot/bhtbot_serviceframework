@@ -86,6 +86,15 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="appconfig.html#port" class="tsd-kind-icon">port</a></li>
 							</ul>
 						</section>
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="appconfig.html#addmiddleware" class="tsd-kind-icon">add<wbr>Middle<wbr>Ware</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="appconfig.html#seterrorhandler" class="tsd-kind-icon">set<wbr>Error<wbr>Handler</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="appconfig.html#setmiddleware" class="tsd-kind-icon">set<wbr>Middle<wbr>Ware</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="appconfig.html#setport" class="tsd-kind-icon">set<wbr>Port</a></li>
+							</ul>
+						</section>
 					</div>
 				</section>
 			</section>
@@ -97,7 +106,7 @@
 					<div class="tsd-signature tsd-kind-icon">error<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol"> = defaultErrorHandler</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SickRed/bhtbot_serviceframework/blob/57451ed/src/lib/AppConfig.ts#L12">lib/AppConfig.ts:12</a></li>
+							<li>Defined in <a href="https://github.com/beuthbot/bhtbot_serviceframework/blob/6999843/src/lib/AppConfig.ts#L12">lib/AppConfig.ts:12</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -137,7 +146,7 @@
 					<div class="tsd-signature tsd-kind-icon">middleware<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">NextHandleFunction</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> = [jsonMiddleware,urlEncodeMiddleware,cookieMiddleware,]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SickRed/bhtbot_serviceframework/blob/57451ed/src/lib/AppConfig.ts#L13">lib/AppConfig.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/beuthbot/bhtbot_serviceframework/blob/6999843/src/lib/AppConfig.ts#L13">lib/AppConfig.ts:13</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -147,9 +156,131 @@
 					<div class="tsd-signature tsd-kind-icon">port<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 3000</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/SickRed/bhtbot_serviceframework/blob/57451ed/src/lib/AppConfig.ts#L11">lib/AppConfig.ts:11</a></li>
+							<li>Defined in <a href="https://github.com/beuthbot/bhtbot_serviceframework/blob/6999843/src/lib/AppConfig.ts#L11">lib/AppConfig.ts:11</a></li>
 						</ul>
 					</aside>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="addmiddleware" class="tsd-anchor"></a>
+					<h3>add<wbr>Middle<wbr>Ware</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Middle<wbr>Ware<span class="tsd-signature-symbol">(</span>middleware<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextHandleFunction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/beuthbot/bhtbot_serviceframework/blob/6999843/src/lib/AppConfig.ts#L30">lib/AppConfig.ts:30</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>middleware: <span class="tsd-signature-type">NextHandleFunction</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="seterrorhandler" class="tsd-anchor"></a>
+					<h3>set<wbr>Error<wbr>Handler</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Error<wbr>Handler<span class="tsd-signature-symbol">(</span>func<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/beuthbot/bhtbot_serviceframework/blob/6999843/src/lib/AppConfig.ts#L22">lib/AppConfig.ts:22</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>func: <span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>err<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, req<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, res<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, next<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>err: <span class="tsd-signature-type">any</span></h5>
+														</li>
+														<li>
+															<h5>req: <span class="tsd-signature-type">any</span></h5>
+														</li>
+														<li>
+															<h5>res: <span class="tsd-signature-type">any</span></h5>
+														</li>
+														<li>
+															<h5>next: <span class="tsd-signature-type">any</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setmiddleware" class="tsd-anchor"></a>
+					<h3>set<wbr>Middle<wbr>Ware</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Middle<wbr>Ware<span class="tsd-signature-symbol">(</span>middleware<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">NextHandleFunction</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/beuthbot/bhtbot_serviceframework/blob/6999843/src/lib/AppConfig.ts#L26">lib/AppConfig.ts:26</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>middleware: <span class="tsd-signature-type">NextHandleFunction</span><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setport" class="tsd-anchor"></a>
+					<h3>set<wbr>Port</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">set<wbr>Port<span class="tsd-signature-symbol">(</span>port<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">this</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/beuthbot/bhtbot_serviceframework/blob/6999843/src/lib/AppConfig.ts#L18">lib/AppConfig.ts:18</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>port: <span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">this</span></h4>
+						</li>
+					</ul>
 				</section>
 			</section>
 		</div>
@@ -176,6 +307,18 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="appconfig.html#port" class="tsd-kind-icon">port</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="appconfig.html#addmiddleware" class="tsd-kind-icon">add<wbr>Middle<wbr>Ware</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="appconfig.html#seterrorhandler" class="tsd-kind-icon">set<wbr>Error<wbr>Handler</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="appconfig.html#setmiddleware" class="tsd-kind-icon">set<wbr>Middle<wbr>Ware</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="appconfig.html#setport" class="tsd-kind-icon">set<wbr>Port</a>
 							</li>
 						</ul>
 					</li>
