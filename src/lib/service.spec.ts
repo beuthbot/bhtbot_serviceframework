@@ -1,12 +1,12 @@
 import test from 'ava';
+import request from 'supertest';
 
-import {Service} from "../index";
+import { Service } from '../index';
+
 const testServiceName = 'testService';
-const request = require('supertest');
 
 const testResponseContent = 'Test Response Content';
 const testEndpoint = 'testEndpoint';
-
 
 test('basics', (t) => {
   const service = new Service(testServiceName);
@@ -15,7 +15,6 @@ test('basics', (t) => {
 });
 
 test('endpoint', async (t) => {
-
   return t.assert(true); //todo
 
   const service = await new Service(testServiceName).start();
@@ -24,7 +23,7 @@ test('endpoint', async (t) => {
     return answer.setContent(testResponseContent);
   });
 
-  let res = await request(service.expressApp).post('/' + testEndpoint);
+  const res = await request(service.expressApp).post('/' + testEndpoint);
   t.is(res.status, 200);
   t.is(res.body, null);
   t.is(service.isRunning, true);
@@ -33,7 +32,6 @@ test('endpoint', async (t) => {
 });
 
 test.serial('server', async (t) => {
-
   const service = await new Service(testServiceName).start();
 
   let res = await request(service.expressApp).get('/');
@@ -51,5 +49,4 @@ test.serial('server', async (t) => {
   t.is(service.isRunning, false);
 
   await t.throwsAsync(await service.stop);
-
-})
+});

@@ -1,16 +1,17 @@
+import * as http from 'http';
+
 import express, { Express } from 'express';
 
 import AppConfig from './AppConfig';
 import GatewayAnswer from './GatewayAnswer';
 import GatewayRequest from './GatewayRequest';
-import * as http from "http";
 
 export default class Service {
   private readonly _config: AppConfig;
   private readonly _expressApp: Express;
   private readonly _serviceName: string;
-  private endpoints = {};
-  private server: http.Server;
+  private _endpoints = {};
+  private _server: http.Server;
 
   constructor(serviceName: string, config?: AppConfig) {
     this._serviceName = serviceName;
@@ -20,31 +21,28 @@ export default class Service {
   }
 
   async start() {
-    return await new Promise<Service> ((resolve, reject) => {
+    return await new Promise<Service>((resolve, reject) => {
       try {
-        this.server = this._expressApp.listen(this._config.port, () => {
+        this._server = this._expressApp.listen(this._config.port, () => {
           console.log(
             `${this._serviceName} listening at http://localhost:${this._config.port}`
           );
         });
         resolve(this);
-      }
-      catch (e) {
+      } catch (e) {
         reject(e);
       }
-    })
+    });
   }
 
   async stop() {
-    return await new Promise<Service> ((resolve, reject) => {
+    return await new Promise<Service>((resolve, reject) => {
       try {
-        if (this.server) {
-          this.server.close(_res=> {
-            this.server = undefined;
-            console.log(
-              `${this._serviceName} stopped`
-            );
-            resolve(this)
+        if (this._server) {
+          this._server.close((_res) => {
+            this._server = undefined;
+            console.log(`${this._serviceName} stopped`);
+            resolve(this);
           });
         }
       } catch (e) {
@@ -63,7 +61,7 @@ export default class Service {
     if (path.length === 0) path = '/';
     if (path[0] !== '/') path = '/' + path;
 
-    this.endpoints[path] = handler;
+    this._endpoints[path] = handler;
     this._expressApp.post(path, async (req, res) => {
       const gatewayRequest = this.sanitize(req.body.message);
 
@@ -149,6 +147,14 @@ export default class Service {
   }
 
   get isRunning() {
-    return !!this.server;
+    return !!this._server;
+  }
+
+  get server(): http.Server {
+    return this._server;
+  }
+
+  get endpoints() {
+    return this._endpoints;
   }
 }
