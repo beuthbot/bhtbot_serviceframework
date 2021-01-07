@@ -1,8 +1,12 @@
+import fs from 'fs';
+
 import test from 'ava';
 import { UploadedFile } from 'express-fileupload';
 import request from 'supertest';
 
 import { GatewayRequest, Service } from '../index';
+
+import FileAnswer from './FileAnswer';
 
 const testServiceName = 'testService';
 
@@ -12,6 +16,9 @@ const testEndpoint = 'testEndpoint';
 const testFilePath = 'src/lib/service.ts';
 const testFileName = 'service.ts';
 
+const testFilePathOGG = 'test/assets/example.ogg';
+const testFileNameOGG = 'example.ogg';
+
 const testRequest = new GatewayRequest();
 testRequest.history = ['test'];
 testRequest.text = 'Test Query';
@@ -20,6 +27,46 @@ test('basics', (t) => {
   const service = new Service(testServiceName);
   t.assert(service != null);
   t.assert(service.serviceName, testServiceName);
+});
+
+test.serial('download_endpoint', async (t) => {
+  const service = await new Service(testServiceName).start();
+  const fromBuffer = '_from_buffer';
+
+  service.endpoint(testEndpoint, async (_request, _answer) => {
+    return FileAnswer.fromPath(testFilePathOGG);
+  });
+
+  service.endpoint(testEndpoint + fromBuffer, async (_request, _answer) => {
+    return FileAnswer.fromBuffer(
+      fs.readFileSync(testFilePathOGG),
+      testFileNameOGG
+    );
+  });
+
+  // test with filepath
+  await request(service.expressApp)
+    .post('/' + testEndpoint)
+    .set('Accept', 'application/json')
+    .send({ message: {} })
+    .expect(200)
+    .expect('Content-Type', 'audio/ogg');
+
+  // test with file from memory buffer
+  await request(service.expressApp)
+    .post('/' + testEndpoint + fromBuffer)
+    .set('Accept', 'application/json')
+    .send({ message: {} })
+    .expect(200)
+    .expect('Content-Type', 'audio/ogg')
+    .then((response) => {
+      // console.log(response)
+      return response;
+    });
+
+  t.is(service.isRunning, true);
+
+  await service.stop();
 });
 
 test.serial('endpoint', async (t) => {

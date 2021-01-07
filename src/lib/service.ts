@@ -3,6 +3,7 @@ import * as http from 'http';
 import express, { Express } from 'express';
 
 import AppConfig from './AppConfig';
+import FileAnswer from './FileAnswer';
 import GatewayAnswer from './GatewayAnswer';
 import GatewayFileRequest from './GatewayFileRequest';
 import GatewayRequest from './GatewayRequest';
@@ -57,7 +58,7 @@ export default class Service {
     handler: (
       request: GatewayFileRequest,
       answer: GatewayAnswer
-    ) => Promise<GatewayAnswer>
+    ) => Promise<GatewayAnswer | FileAnswer>
   ) {
     path = this.sanitizePath(path);
 
@@ -68,7 +69,12 @@ export default class Service {
       }
 
       const fileRequest = new GatewayFileRequest(req.files);
-      let answer = new GatewayAnswer();
+      let answer: GatewayAnswer | FileAnswer = new GatewayAnswer();
+
+      if (answer instanceof FileAnswer) {
+        return res.status(200).download(answer.filePath, answer.fileName);
+      }
+
       answer.setHistory(['file_upload']);
       answer = await handler(fileRequest, answer);
 
@@ -81,7 +87,7 @@ export default class Service {
     handler: (
       request: GatewayRequest,
       answer: GatewayAnswer
-    ) => Promise<GatewayAnswer>
+    ) => Promise<GatewayAnswer | FileAnswer>
   ) {
     path = this.sanitizePath(path);
 
@@ -91,10 +97,13 @@ export default class Service {
 
       try {
         const expectedHistory = gatewayRequest.answer.history;
-        gatewayRequest.answer = await handler(
-          gatewayRequest,
-          gatewayRequest.answer
-        );
+        const answer = await handler(gatewayRequest, gatewayRequest.answer);
+
+        if (answer instanceof FileAnswer) {
+          return res.status(200).download(answer.filePath, answer.fileName);
+        }
+
+        gatewayRequest.answer = answer;
 
         if (!this.isAnswerValid(gatewayRequest.answer, expectedHistory)) {
           throw Error(
