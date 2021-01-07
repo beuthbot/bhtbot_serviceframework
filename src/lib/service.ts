@@ -4,6 +4,7 @@ import express, { Express } from 'express';
 
 import AppConfig from './AppConfig';
 import GatewayAnswer from './GatewayAnswer';
+import GatewayFileRequest from './GatewayFileRequest';
 import GatewayRequest from './GatewayRequest';
 
 export default class Service {
@@ -27,8 +28,8 @@ export default class Service {
           console.log(
             `${this._serviceName} listening at http://localhost:${this._config.port}`
           );
+          resolve(this);
         });
-        resolve(this);
       } catch (e) {
         reject(e);
       }
@@ -51,6 +52,30 @@ export default class Service {
     });
   }
 
+  fileUploadEndpoint(
+    path: string,
+    handler: (
+      request: GatewayFileRequest,
+      answer: GatewayAnswer
+    ) => Promise<GatewayAnswer>
+  ) {
+    path = this.sanitizePath(path);
+
+    this._endpoints[path] = { handler, isFileUpload: true };
+    this._expressApp.post(path, async (req, res) => {
+      if (!req.files || Object.keys(req.files).length === 0) {
+        return res.status(400).send('No files were uploaded.');
+      }
+
+      const fileRequest = new GatewayFileRequest(req.files);
+      let answer = new GatewayAnswer();
+      answer.setHistory(['file_upload']);
+      answer = await handler(fileRequest, answer);
+
+      return await res.json({ answer });
+    });
+  }
+
   endpoint(
     path: string,
     handler: (
@@ -58,10 +83,9 @@ export default class Service {
       answer: GatewayAnswer
     ) => Promise<GatewayAnswer>
   ) {
-    if (path.length === 0) path = '/';
-    if (path[0] !== '/') path = '/' + path;
+    path = this.sanitizePath(path);
 
-    this._endpoints[path] = handler;
+    this._endpoints[path] = { handler, isFileUpload: false };
     this._expressApp.post(path, async (req, res) => {
       const gatewayRequest = this.sanitize(req.body.message);
 
@@ -79,11 +103,11 @@ export default class Service {
           );
         }
 
-        res.json(gatewayRequest);
+        await res.json(gatewayRequest);
       } catch (ex) {
         gatewayRequest.answer.error =
           'Error in ' + this._serviceName + ': ' + ex.message;
-        res.json(gatewayRequest);
+        await res.json(gatewayRequest);
       }
     });
   }
@@ -156,5 +180,11 @@ export default class Service {
 
   get endpoints() {
     return this._endpoints;
+  }
+
+  private sanitizePath(path: string) {
+    if (path.length === 0) path = '/';
+    if (path[0] !== '/') path = '/' + path;
+    return path;
   }
 }

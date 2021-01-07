@@ -3,6 +3,7 @@ import { NextHandleFunction } from 'connect';
 import {
   cookieMiddleware,
   defaultErrorHandler,
+  fileUploadMiddleware,
   jsonMiddleware,
   urlEncodeMiddleware,
 } from './DefaultMiddleware';
@@ -14,6 +15,7 @@ export default class AppConfig {
     jsonMiddleware,
     urlEncodeMiddleware,
     cookieMiddleware,
+    fileUploadMiddleware,
   ];
   setPort(port: number) {
     this.port = port;
