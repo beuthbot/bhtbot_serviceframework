@@ -116,6 +116,7 @@ export default class Service {
       } catch (ex) {
         gatewayRequest.answer.error =
           'Error in ' + this._serviceName + ': ' + ex.message;
+        gatewayRequest.answer.setCacheable(false);
         await res.json(gatewayRequest);
       }
     });
