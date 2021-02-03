@@ -6,6 +6,7 @@ import request from 'supertest';
 
 import { GatewayRequest, Service } from '../index';
 
+import AppConfig from './AppConfig';
 import FileAnswer from './FileAnswer';
 
 const testServiceName = 'testService';
@@ -23,6 +24,8 @@ const testRequest = new GatewayRequest();
 testRequest.history = ['test'];
 testRequest.text = 'Test Query';
 
+const testPort = 25522;
+
 test('basics', (t) => {
   const service = new Service(testServiceName);
   t.assert(service != null);
@@ -30,7 +33,10 @@ test('basics', (t) => {
 });
 
 test.serial('download_endpoint', async (t) => {
-  const service = await new Service(testServiceName).start();
+  const service = await new Service(
+    testServiceName,
+    new AppConfig().setPort(testPort)
+  ).start();
   const fromBuffer = '_from_buffer';
 
   service.endpoint(testEndpoint, async (_request, _answer) => {
@@ -70,7 +76,10 @@ test.serial('download_endpoint', async (t) => {
 });
 
 test.serial('endpoint', async (t) => {
-  const service = await new Service(testServiceName).start();
+  const service = await new Service(
+    testServiceName,
+    new AppConfig().setPort(testPort)
+  ).start();
 
   service.endpoint(testEndpoint, async (_request, answer) => {
     return answer.setContent(testResponseContent);
@@ -98,7 +107,10 @@ test.serial('endpoint', async (t) => {
 });
 
 test.serial('file_endpoint', async (t) => {
-  const service = await new Service(testServiceName).start();
+  const service = await new Service(
+    testServiceName,
+    new AppConfig().setPort(testPort)
+  ).start();
 
   service.fileUploadEndpoint(testEndpoint, async (request, answer) => {
     const fileKeys = Object.keys(request.files);
@@ -124,7 +136,10 @@ test.serial('file_endpoint', async (t) => {
 });
 
 test.serial('server', async (t) => {
-  const service = await new Service(testServiceName).start();
+  const service = await new Service(
+    testServiceName,
+    new AppConfig().setPort(testPort)
+  ).start();
 
   let res = await request(service.expressApp).get('/');
   t.is(res.status, 200);
