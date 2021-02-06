@@ -46,6 +46,8 @@ export default class Service {
             console.log(`${this._serviceName} stopped`);
             resolve(this);
           });
+        } else {
+          reject(new Error('Stop called before server initialized'));
         }
       } catch (e) {
         reject(e);
@@ -71,12 +73,12 @@ export default class Service {
       const fileRequest = new GatewayFileRequest(req.files);
       let answer: GatewayAnswer | FileAnswer = new GatewayAnswer();
 
-      if (answer instanceof FileAnswer) {
-        return res.status(200).download(answer.filePath, answer.fileName);
-      }
-
       answer.setHistory(['file_upload']);
       answer = await handler(fileRequest, answer);
+
+      if (answer instanceof FileAnswer) {
+        return res.download(answer.filePath, answer.fileName);
+      }
 
       return await res.json({ answer });
     });
@@ -125,9 +127,7 @@ export default class Service {
   }
 
   private sanitize(message: GatewayRequest) {
-    if (message.answer == undefined) {
-      message.answer = new GatewayAnswer();
-    }
+    message.answer = new GatewayAnswer();
     const history = message.history !== undefined ? message.history : [];
     message.answer.history = history.concat([this._serviceName]);
     return message;

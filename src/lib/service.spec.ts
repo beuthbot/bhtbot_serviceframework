@@ -14,11 +14,12 @@ const testServiceName = 'testService';
 const testResponseContent = 'Test Response Content';
 const testEndpoint = 'testEndpoint';
 
-const testFilePath = 'src/lib/service.ts';
-const testFileName = 'service.ts';
-
 const testFilePathOGG = 'test/assets/example.ogg';
 const testFileNameOGG = 'example.ogg';
+
+const testFilePath = testFilePathOGG;
+const testFileName = testFileNameOGG;
+const testFileBufferSize = 105243;
 
 const testRequest = new GatewayRequest();
 testRequest.history = ['test'];
@@ -26,10 +27,73 @@ testRequest.text = 'Test Query';
 
 const testPort = 25522;
 
-test('basics', (t) => {
-  const service = new Service(testServiceName);
+test.serial('basics', async (t) => {
+  const service = new Service(
+    testServiceName,
+    new AppConfig().setPort(testPort)
+  );
   t.assert(service != null);
   t.assert(service.serviceName, testServiceName);
+
+  t.assert(!service.server, 'Server is undefined');
+
+  await service.start();
+
+  t.assert(service.server, 'Server is defined');
+  t.assert(Object.keys(service.endpoints).length === 0, 'No endpoints');
+
+  service.endpoint('', (_) => null);
+  t.assert(Object.keys(service.endpoints).length === 1, 'One endpoints');
+  t.assert(
+    service.endpoints['/'] !== undefined,
+    'Empty Endpoint got sanitized'
+  );
+
+  await service.stop();
+});
+
+test.serial('history error', async (t) => {
+  const service = await new Service(
+    testServiceName,
+    new AppConfig().setPort(testPort)
+  ).start();
+
+  service.endpoint(testEndpoint, async (_req, answ) => {
+    return answ.setHistory([]).setContent('No History..');
+  });
+
+  await request(service.expressApp)
+    .post('/' + testEndpoint)
+    .set('Accept', 'application/json')
+    .send({ message: {} })
+    .expect(200)
+    .then((response) => {
+      t.assert(
+        response.body.answer.error &&
+          response.body.answer.error.indexOf('history') > 0,
+        'History error occured on bad answer'
+      );
+      return response;
+    });
+
+  t.pass();
+
+  await service.stop();
+});
+
+test.serial('default AppConfig', async (t) => {
+  const service = await new Service(testServiceName);
+  t.assert(service.config && service.config.port > 0, 'default config loaded');
+});
+
+test.serial('stop before start', async (t) => {
+  const service = new Service(testServiceName);
+  try {
+    await service.stop();
+  } catch (e) {
+    return t.pass('Stop service before start exception');
+  }
+  t.fail('No exception on stop without start');
 });
 
 test.serial('download_endpoint', async (t) => {
@@ -115,8 +179,32 @@ test.serial('file_endpoint', async (t) => {
   service.fileUploadEndpoint(testEndpoint, async (request, answer) => {
     const fileKeys = Object.keys(request.files);
     const firstFile: UploadedFile = <UploadedFile>request.files[fileKeys[0]];
+    t.is(
+      firstFile.data.length,
+      testFileBufferSize,
+      'Buffer Size of example File matches'
+    );
     return answer.setContent(firstFile.name);
   });
+
+  service.fileUploadEndpoint(
+    testEndpoint + 'file',
+    async (request, _answer) => {
+      const fileKeys = Object.keys(request.files);
+      const firstFile: UploadedFile = <UploadedFile>request.files[fileKeys[0]];
+      t.is(
+        firstFile.data.length,
+        testFileBufferSize,
+        'Buffer Size of example File matches'
+      );
+      console.log('fileanswerr from buffer', firstFile);
+      return FileAnswer.fromBuffer(firstFile.data, firstFile.name);
+    }
+  );
+
+  await request(service.expressApp)
+    .post('/' + testEndpoint)
+    .expect(400);
 
   await request(service.expressApp)
     .post('/' + testEndpoint)
@@ -129,6 +217,12 @@ test.serial('file_endpoint', async (t) => {
       t.is(response.body.answer.content, testFileName);
       return response;
     });
+
+  await request(service.expressApp)
+    .post('/' + testEndpoint + 'file')
+    .set('Accept', 'audio/ogg')
+    .attach(testFileName, testFilePath)
+    .expect(200);
 
   t.is(service.isRunning, true);
 
