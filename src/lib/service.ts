@@ -114,6 +114,8 @@ export default class Service {
 
         await res.json(gatewayRequest);
       } catch (ex) {
+        console.log('Handled Exception by Framework', ex);
+        console.error(ex.stackTrace);
         gatewayRequest.answer.error =
           'Error in ' + this._serviceName + ': ' + ex.message;
         gatewayRequest.answer.setCacheable(false);
