@@ -85,11 +85,11 @@
 				</ul>
 				<p>Tests:</p>
 				<ul>
-					<li>Most of the features are also represented in extensive Tests, so you might find it helpful to take a look at <a href="src/lib/service.spec.ts">src/lib/service.spec.ts</a></li>
-				</ul>
-				<p>Specs:</p>
-				<ul>
-					<li>Generated technical documentation can be found at: <a href="https://beuthbot.github.io/bhtbot_serviceframework/">https://beuthbot.github.io/bhtbot_serviceframework/</a></li>
+					<li><p>Most of the features are also represented in extensive Tests, so you might find it helpful to take a look at <a href="src/lib/service.spec.ts">src/lib/service.spec.ts</a></p>
+						<p>Specs:</p>
+					</li>
+					<li><p>Generated technical documentation can be found at: <a href="https://beuthbot.github.io/bhtbot_serviceframework/">https://beuthbot.github.io/bhtbot_serviceframework/</a></p>
+					</li>
 				</ul>
 				<a href="#quick-start-a-service" id="quick-start-a-service" style="color: inherit; text-decoration: none;">
 					<h2>Quick start a service</h2>
@@ -100,15 +100,17 @@
 				<p>Install Dependency to your (node)app</p>
 				<pre><code class="language-shell"><span class="hljs-meta">$</span><span class="bash"> npm i @bhtbot/bhtbotservice</span>
 or
-<span class="hljs-meta">$</span><span class="bash"> yarn add @bhtbot/bhtbotservice</span></code></pre>
+<span class="hljs-meta">$</span><span class="bash"> yarn add @bhtbot/bhtbotservice</span>
+</code></pre>
 				<a href="#init--config--port--middleware" id="init--config--port--middleware" style="color: inherit; text-decoration: none;">
 					<h3>Init | Config | Port | Middleware</h3>
 				</a>
 				<p>Inititalize the Service on a port, specified by process environment</p>
-				<pre><code>import {Service, AppConfig} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@bhtbot/bhtbotservice&#x27;</span>;
-const<span class="hljs-built_in"> config </span>= new AppConfig();
-config.port = process.env.CATS_PORT ? Number(process.env.CATS_PORT) : 3000;
-const<span class="hljs-built_in"> service </span>= new Service(<span class="hljs-string">&#x27;catService&#x27;</span>, config);</code></pre>
+				<pre><code><span class="hljs-keyword">import</span> {Service, AppConfig} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@bhtbot/bhtbotservice&#x27;</span>;
+<span class="hljs-keyword">const</span> config = <span class="hljs-keyword">new</span> AppConfig();
+config.port = process.env.CATS_PORT ? <span class="hljs-built_in">Number</span>(process.env.CATS_PORT) : <span class="hljs-number">3000</span>;
+<span class="hljs-keyword">const</span> service = <span class="hljs-keyword">new</span> Service(<span class="hljs-string">&#x27;catService&#x27;</span>, config);
+</code></pre>
 				<p>Other Options for config can be found here: <a href="https://beuthbot.github.io/bhtbot_serviceframework/classes/appconfig.html">https://beuthbot.github.io/bhtbot_serviceframework/classes/appconfig.html</a></p>
 				<p>For example, if you need to enable another Middleware for your service (like CORS in this example):</p>
 				<pre><code><span class="hljs-comment">//...</span>
@@ -116,7 +118,8 @@ const<span class="hljs-built_in"> service </span>= new Service(<span class="hljs
 <span class="hljs-comment">//...</span>
 <span class="hljs-keyword">const</span> config = <span class="hljs-keyword">new</span> AppConfig();
 config.addMiddleWare(cors());
-<span class="hljs-keyword">const</span> service = <span class="hljs-keyword">new</span> Service(<span class="hljs-string">&#x27;catService&#x27;</span>, config);</code></pre>
+<span class="hljs-keyword">const</span> service = <span class="hljs-keyword">new</span> Service(<span class="hljs-string">&#x27;catService&#x27;</span>, config);
+</code></pre>
 				<a href="#content-serives-basic-endpoint" id="content-serives-basic-endpoint" style="color: inherit; text-decoration: none;">
 					<h3>Content Serives (Basic Endpoint)</h3>
 				</a>
@@ -126,7 +129,8 @@ config.addMiddleWare(cors());
 				<pre><code><span class="hljs-comment">/* Listen on endpoint /cat */</span>
 service.endpoint(&#x27;cat&#x27;, async<span class="hljs-function"> (<span class="hljs-params">req</span>: G<span class="hljs-params">atewayRequest</span>, <span class="hljs-params">answ</span>: G<span class="hljs-params">atewayAnswer</span>)=&gt;</span>{
     return answ.set<span class="hljs-constructor">Content((<span class="hljs-params">await</span> <span class="hljs-params">queryCat</span>()</span>).url).set<span class="hljs-constructor">Cacheable(<span class="hljs-params">false</span>)</span>;
-})</code></pre>
+})
+</code></pre>
 				<p>In this simple use case we just return the provided answer with the generated output as content.
 				In most use cases, a content service won&#39;t do any more communication-related stuff within the service itself.</p>
 				<a href="#utility-services-advanced-endpoints" id="utility-services-advanced-endpoints" style="color: inherit; text-decoration: none;">
@@ -141,21 +145,24 @@ service.endpoint(&#x27;cat&#x27;, async<span class="hljs-function"> (<span class
     const fileKeys = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Object</span>.</span></span>keys(request.files);
     const firstFile: UploadedFile = &lt;UploadedFile&gt;request.files<span class="hljs-literal">[<span class="hljs-identifier">fileKeys</span>[<span class="hljs-number">0</span>]</span>];
     return answer.set<span class="hljs-constructor">Content(<span class="hljs-params">firstFile</span>.<span class="hljs-params">name</span>)</span>;
-  });</code></pre>
+  });
+</code></pre>
 				<a href="#file-answer" id="file-answer" style="color: inherit; text-decoration: none;">
 					<h4>File Answer</h4>
 				</a>
 				<p>For passing Files as response of Gateway-Requests</p>
 				<pre><code>service.endpoint(testEndpoint, async<span class="hljs-function"> (<span class="hljs-params">_request</span>, <span class="hljs-params">_answer</span>) =&gt;</span> {
     return <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">FileAnswer</span>.</span></span>from<span class="hljs-constructor">Path(<span class="hljs-params">testFilePathOGG</span>)</span>;
-});</code></pre>
+});
+</code></pre>
 				<a href="#arbitrary-endpoints" id="arbitrary-endpoints" style="color: inherit; text-decoration: none;">
 					<h4>Arbitrary Endpoints</h4>
 				</a>
 				<p>If you need any special endpoint that can&#39;t be created with the given tools, feel free to register them like you usually would within an express server</p>
-				<pre><code>service.expressApp.<span class="hljs-built_in">get</span>(<span class="hljs-string">&#x27;/custom&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-title">req</span>, <span class="hljs-title">res</span>) {</span>
-    res.<span class="hljs-built_in">send</span>(<span class="hljs-string">&#x27;Hello Custom endpoint&#x27;</span>)
-})</code></pre>
+				<pre><code>service.expressApp.<span class="hljs-built_in">get</span>(<span class="hljs-string">&#x27;/custom&#x27;</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(req, res)</span> {</span>
+    <span class="hljs-keyword">res</span>.send(<span class="hljs-string">&#x27;Hello Custom endpoint&#x27;</span>)
+})
+</code></pre>
 				<a href="#contribution" id="contribution" style="color: inherit; text-decoration: none;">
 					<h2>Contribution</h2>
 				</a>
@@ -167,10 +174,12 @@ service.endpoint(&#x27;cat&#x27;, async<span class="hljs-function"> (<span class
 				</a>
 				<p>For development you can use convenient watchers that will rebuild on file change</p>
 				<pre><code><span class="hljs-meta">$</span><span class="bash"> npm watch:build</span>
-<span class="hljs-meta">$</span><span class="bash"> npm watch:<span class="hljs-built_in">test</span></span></code></pre>
+<span class="hljs-meta">$</span><span class="bash"> npm watch:<span class="hljs-built_in">test</span></span>
+</code></pre>
 				<p>Release builds are triggered by</p>
-				<pre><code>$ npm <span class="hljs-symbol">build:</span>main
-$ npm <span class="hljs-symbol">build:</span><span class="hljs-class"><span class="hljs-keyword">module</span></span></code></pre>
+				<pre><code>$ <span class="hljs-built_in">npm</span> build:main
+$ <span class="hljs-built_in">npm</span> build:<span class="hljs-built_in">module</span>
+</code></pre>
 				<a href="#lint-amp-beautify" id="lint-amp-beautify" style="color: inherit; text-decoration: none;">
 					<h3>Lint &amp; beautify</h3>
 				</a>
@@ -179,13 +188,15 @@ $ npm <span class="hljs-symbol">build:</span><span class="hljs-class"><span clas
 <span class="hljs-variable">$npm</span> <span class="hljs-builtin-name">run</span> fix:lint
 <span class="hljs-variable">$npm</span> <span class="hljs-builtin-name">run</span> test:prettier
 <span class="hljs-variable">$npm</span> <span class="hljs-builtin-name">run</span> test:lint
-<span class="hljs-variable">$npm</span> <span class="hljs-builtin-name">run</span> test:spelling</code></pre>
+<span class="hljs-variable">$npm</span> <span class="hljs-builtin-name">run</span> test:spelling
+</code></pre>
 				<a href="#test" id="test" style="color: inherit; text-decoration: none;">
 					<h3>Test</h3>
 				</a>
 				<p>There are unit tests as well as coverage checks</p>
-				<pre><code>$ npm <span class="hljs-keyword">run</span><span class="bash"> <span class="hljs-built_in">test</span>: unit</span>
-$ npm <span class="hljs-keyword">run</span><span class="bash"> cov</span></code></pre>
+				<pre><code>$ npm <span class="hljs-builtin-name">run</span> test: unit
+$ npm <span class="hljs-builtin-name">run</span> cov
+</code></pre>
 				<a href="#releasing" id="releasing" style="color: inherit; text-decoration: none;">
 					<h3>Releasing</h3>
 				</a>
@@ -194,14 +205,16 @@ $ npm <span class="hljs-keyword">run</span><span class="bash"> cov</span></code>
 				</a>
 				<p>The final release script combines all the steps into a single pipeline which also heightens the build version in package.json and commits the version as a tag for the repository.</p>
 				<p>This will also generate the docs with <code>npm run doc</code> which will be published to <a href="https://beuthbot.github.io/bhtbot_serviceframework">github pages</a></p>
-				<pre><code>$ <span class="hljs-comment"># npm run reset-hard # BEWARE: this will clear your working tree. make sure every changes you want to publish are commited</span>
-$ npm <span class="hljs-keyword">run</span><span class="bash"> prepare-release</span></code></pre>
+				<pre><code><span class="hljs-variable">$ </span><span class="hljs-comment"># npm run reset-hard # BEWARE: this will clear your working tree. make sure every changes you want to publish are commited</span>
+<span class="hljs-variable">$ </span>npm run prepare-release
+</code></pre>
 				<a href="#publishing" id="publishing" style="color: inherit; text-decoration: none;">
 					<h4>Publishing</h4>
 				</a>
 				<p>After the build pipeline is finished, you will be provided with information about how to publish, which essentially means pushing your code to the git repository and publishing the build to npmjs</p>
 				<pre><code><span class="hljs-variable">$ </span>git push --tags
-<span class="hljs-variable">$ </span>npm publish</code></pre>
+<span class="hljs-variable">$ </span>npm publish
+</code></pre>
 				<a href="#versioning--changelog" id="versioning--changelog" style="color: inherit; text-decoration: none;">
 					<h4>Versioning / Changelog</h4>
 				</a>
