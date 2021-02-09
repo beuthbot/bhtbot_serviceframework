@@ -69,8 +69,11 @@ export default class Service {
       if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send('No files were uploaded.');
       }
+      if (!req.body || !req.body.serviceUserId) {
+        return res.status(400).send('serviceUserId must be supplied');
+      }
 
-      const fileRequest = new GatewayFileRequest(req.files);
+      const fileRequest = new GatewayFileRequest(req.files, req.body);
       let answer: GatewayAnswer | FileAnswer = new GatewayAnswer();
 
       answer.setHistory(['file_upload']);

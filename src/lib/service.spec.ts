@@ -10,6 +10,7 @@ import AppConfig from './AppConfig';
 import FileAnswer from './FileAnswer';
 
 const testServiceName = 'testService';
+const testUserServiceId = 'testUserId';
 
 const testResponseContent = 'Test Response Content';
 const testEndpoint = 'testEndpoint';
@@ -209,6 +210,7 @@ test.serial('file_endpoint', async (t) => {
   await request(service.expressApp)
     .post('/' + testEndpoint)
     .set('Accept', 'application/json')
+    .field('serviceUserId', testUserServiceId)
     .attach(testFileName, testFilePath)
     .expect(200)
     .expect('Content-Type', /json/)
@@ -221,6 +223,7 @@ test.serial('file_endpoint', async (t) => {
   await request(service.expressApp)
     .post('/' + testEndpoint + 'file')
     .set('Accept', 'audio/ogg')
+    .field('serviceUserId', testUserServiceId)
     .attach(testFileName, testFilePath)
     .expect(200);
 
